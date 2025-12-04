@@ -1,15 +1,30 @@
-# aoc_2025
+# Advent of Code 2025
 
-To install dependencies:
+This repository contains solutions for the Advent of Code 2025 programming challenges.
+
+## Setup
 
 ```bash
 bun install
 ```
 
-To run:
+## Running Solutions
 
 ```bash
-bun run index.ts
+# Run Day 1
+bun run one
+
+# Run Day 2
+bun run two
+
+# Run Day 3
+bun run three
 ```
 
-This project was created using `bun init` in bun v1.3.3. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+## Development
+
+```bash
+bun run fmt
+```
+
+This project uses Bun and TypeScript.
