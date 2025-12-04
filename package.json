@@ -5,6 +5,7 @@
 	"private": true,
 	"scripts": {
 		"one": "bun run ./one/index.ts",
+		"two": "bun run ./two/index.ts",
 		"fmt": "biome check"
 	},
 	"devDependencies": {
@@ -13,5 +14,8 @@
 	},
 	"peerDependencies": {
 		"typescript": "^5"
+	},
+	"dependencies": {
+		"ts-chan": "^0.6.0"
 	}
 }
