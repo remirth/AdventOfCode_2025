@@ -12,19 +12,21 @@ bun install
 
 ```bash
 # Run Day 1
-bun run one
+bun run src/1
 
 # Run Day 2
-bun run two
+bun run src/2
 
 # Run Day 3
-bun run three
+bun run src/3
+
+...
 ```
 
 ## Development
 
 ```bash
-bun run fmt
+bun run fmt --write --unsafe
 ```
 
 This project uses Bun and TypeScript.

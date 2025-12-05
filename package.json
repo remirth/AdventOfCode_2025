@@ -4,9 +4,6 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"one": "bun run ./src/1/index.ts",
-		"two": "bun run ./src/2/index.ts",
-		"three": "bun run ./src/3/index.ts",
 		"fmt": "biome check"
 	},
 	"devDependencies": {
