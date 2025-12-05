@@ -3,12 +3,13 @@ import assert from 'node:assert';
 import {createReadStream} from 'node:fs';
 import path from 'node:path';
 import {createInterface as readline} from 'node:readline';
+import {getIntegerInString} from '../lib/chunk';
 
-async function process(inputFile: string, version: 1 | 2, shouldLog = false) {
+async function process(inputFile: string, version: 1 | 2) {
 	const rl = readline(createReadStream(inputFile));
 	const ranges: Array<{start: number; end: number}> = [];
 
-	let inputType: 'range' | 'id' = 'range';
+	let readingRanges = true;
 
 	let count = 0;
 	let delimiterIndex = 0;
@@ -19,22 +20,19 @@ async function process(inputFile: string, version: 1 | 2, shouldLog = false) {
 	for await (const line of rl) {
 		if (line.length === 0) {
 			if (version === 1) {
-				inputType = 'id';
+				readingRanges = false;
 			} else {
 				break;
 			}
-		} else if (inputType === 'range') {
+		} else if (readingRanges) {
 			delimiterIndex = line.indexOf('-');
 			assert.notEqual(delimiterIndex, -1, 'line does not contain delimiter');
-			start = Number.parseInt(line.substring(0, delimiterIndex), 10);
-			end = Number.parseInt(line.substring(delimiterIndex + 1), 10);
-			assert.strictEqual(Number.isNaN(start), false, `Start: ${start} is NaN`);
-			assert.strictEqual(Number.isNaN(start), false, `End: ${end} is NaN`);
+			start = getIntegerInString(line, 0, delimiterIndex);
+			end = getIntegerInString(line, delimiterIndex + 1);
 
 			ranges.push({start, end});
-		} else if (inputType === 'id' && version === 1) {
-			id = Number.parseInt(line, 10);
-			assert.strictEqual(Number.isNaN(id), false, `Id: ${line} is NaN`);
+		} else if (!readingRanges && version === 1) {
+			id = getIntegerInString(line);
 			for (const range of ranges) {
 				if (id >= range.start && id <= range.end) {
 					count++;
@@ -57,7 +55,6 @@ async function process(inputFile: string, version: 1 | 2, shouldLog = false) {
 			}
 		}
 
-		shouldLog && console.log(merged);
 		for (const range of merged) {
 			count += range.end - range.start + 1;
 		}
@@ -72,7 +69,7 @@ const example = path.join(import.meta.dirname, 'example.txt');
 const data = {
 	example_one: await process(example, 1),
 	one: await process(input, 1),
-	example_two: await process(example, 2, true),
+	example_two: await process(example, 2),
 	two: await process(input, 2),
 };
 

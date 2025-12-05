@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import {createReadStream} from 'node:fs';
 import path from 'node:path';
-import {chunkString} from '../lib/chunk.ts';
+import {chunkString, getIntegerInString} from '../lib/chunk.ts';
 import {CommaSplit} from '../lib/commaSplit.ts';
 
 async function process(inputFile: string, customLength?: number) {
@@ -22,14 +22,8 @@ async function process(inputFile: string, customLength?: number) {
 	for await (const range of input) {
 		delimiterIndex = range.indexOf('-');
 		assert.notEqual(delimiterIndex, -1, 'Range does not contain delimiter');
-		start = Number.parseInt(range.substring(0, delimiterIndex), 10);
-		end = Number.parseInt(range.substring(delimiterIndex + 1), 10);
-
-		assert.equal(
-			Number.isNaN(start + end),
-			false,
-			`Either ${start} or ${end} is NaN`,
-		);
+		start = getIntegerInString(range, 0, delimiterIndex);
+		end = getIntegerInString(range, delimiterIndex + 1);
 
 		for (i = start; i <= end; ++i) {
 			token = String(i);
