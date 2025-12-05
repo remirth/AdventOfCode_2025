@@ -1,10 +1,10 @@
-import { Transform } from "node:stream";
+import {Transform} from 'node:stream';
 
 export class CommaSplit extends Transform {
-	private buf = "";
+	private buf = '';
 
 	constructor() {
-		super({ readableObjectMode: true });
+		super({readableObjectMode: true});
 	}
 
 	override _transform(
@@ -12,9 +12,9 @@ export class CommaSplit extends Transform {
 		_enc: BufferEncoding,
 		callback: () => void,
 	) {
-		this.buf += chunk.toString("utf8");
-		const parts = this.buf.split(",");
-		this.buf = parts.pop() ?? ""; // keep the trailing partial
+		this.buf += chunk.toString('utf8');
+		const parts = this.buf.split(',');
+		this.buf = parts.pop() ?? ''; // keep the trailing partial
 		for (const part of parts) {
 			this.push(part); // emit each token
 		}

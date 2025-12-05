@@ -17,6 +17,7 @@
 		"typescript": "^5"
 	},
 	"dependencies": {
+		"arktype": "^2.1.28",
 		"ts-chan": "^0.6.0"
 	}
 }

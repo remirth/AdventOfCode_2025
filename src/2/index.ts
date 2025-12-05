@@ -1,8 +1,8 @@
-import assert from "node:assert";
-import { createReadStream } from "node:fs";
-import path from "node:path";
-import { chunkString } from "../lib/chunk.ts";
-import { CommaSplit } from "../lib/commaSplit.ts";
+import assert from 'node:assert';
+import {createReadStream} from 'node:fs';
+import path from 'node:path';
+import {chunkString} from '../lib/chunk.ts';
+import {CommaSplit} from '../lib/commaSplit.ts';
 
 async function process(inputFile: string, customLength?: number) {
 	const input = createReadStream(inputFile).pipe(new CommaSplit());
@@ -12,7 +12,7 @@ async function process(inputFile: string, customLength?: number) {
 	let delimiterIndex = 0;
 	let start = 0;
 	let end = 0;
-	let token = "";
+	let token = '';
 
 	let j: number;
 	let currentChunk: string;
@@ -20,8 +20,8 @@ async function process(inputFile: string, customLength?: number) {
 	let found = false;
 	let chunkLength = 0;
 	for await (const range of input) {
-		delimiterIndex = range.indexOf("-");
-		assert.notEqual(delimiterIndex, -1, "Range does not contain delimiter");
+		delimiterIndex = range.indexOf('-');
+		assert.notEqual(delimiterIndex, -1, 'Range does not contain delimiter');
 		start = Number.parseInt(range.substring(0, delimiterIndex), 10);
 		end = Number.parseInt(range.substring(delimiterIndex + 1), 10);
 
@@ -38,12 +38,12 @@ async function process(inputFile: string, customLength?: number) {
 			j = customLength != null ? customLength : token.length;
 
 			while (j > 1 && !found) {
-				currentChunk = "";
+				currentChunk = '';
 				chunkLength = token.length / j;
 				matches = true;
 
 				for (const chunk of chunkString(token, chunkLength)) {
-					if (currentChunk === "" && chunk.length === chunkLength) {
+					if (currentChunk === '' && chunk.length === chunkLength) {
 						currentChunk = chunk;
 					} else if (currentChunk !== chunk) {
 						matches = false;
@@ -64,8 +64,8 @@ async function process(inputFile: string, customLength?: number) {
 	return sum;
 }
 
-const input = path.join(import.meta.dirname, "input.txt");
-const example = path.join(import.meta.dirname, "example.txt");
+const input = path.join(import.meta.dirname, 'input.txt');
+const example = path.join(import.meta.dirname, 'example.txt');
 
 const data = {
 	example_one: await process(example, 2),
@@ -75,5 +75,5 @@ const data = {
 };
 
 console.log(data);
-assert.equal(data.example_one, 1227775554, "Example one");
-assert.equal(data.example_two, 4174379265, "Example two");
+assert.equal(data.example_one, 1227775554, 'Example one');
+assert.equal(data.example_two, 4174379265, 'Example two');
