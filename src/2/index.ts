@@ -2,10 +2,10 @@ import assert from 'node:assert';
 import {createReadStream} from 'node:fs';
 import path from 'node:path';
 import {chunkString, getIntegerInString} from '../lib/chunk.ts';
-import {CommaSplit} from '../lib/commaSplit.ts';
+import {SplitStream} from '../lib/streams';
 
 async function process(inputFile: string, customLength?: number) {
-	const input = createReadStream(inputFile).pipe(new CommaSplit());
+	const input = createReadStream(inputFile).pipe(new SplitStream(','));
 
 	let sum = 0;
 	let i = 0;
